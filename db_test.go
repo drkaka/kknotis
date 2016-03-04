@@ -29,7 +29,9 @@ func testDBMethods(t *testing.T) {
 	testGetNoNotifications(t)
 	insertNotifications(t)
 	testGetNotificationsAndRead(t)
+	testReadEmpty(t)
 	testDeleteNotifications(t)
+	testDeleteEmpty(t)
 
 	truncate(t)
 }
@@ -130,6 +132,19 @@ func testGetNotificationsAndRead(t *testing.T) {
 	}
 }
 
+// testReadEmpty to read none existed notifications.
+func testReadEmpty(t *testing.T) {
+	// read one notification.
+	if err := readNotification("notisid"); err != nil {
+		t.Error(err)
+	}
+
+	// read all notifications.
+	if err := readAllNotification(3); err != nil {
+		t.Error(err)
+	}
+}
+
 func testDeleteNotifications(t *testing.T) {
 	result, err := getNotifications(2, 0)
 	if err != nil {
@@ -167,6 +182,19 @@ func testDeleteNotifications(t *testing.T) {
 		if len(oneReadResult) > 0 {
 			t.Error("There should be no result.")
 		}
+	}
+}
+
+// testDeleteEmpty to delete none existed notifications.
+func testDeleteEmpty(t *testing.T) {
+	// delete one notification.
+	if err := deleteNotification("notisid"); err != nil {
+		t.Error(err)
+	}
+
+	// delete all notifications.
+	if err := deleteAllNotification(3); err != nil {
+		t.Error(err)
 	}
 }
 
