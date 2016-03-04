@@ -26,8 +26,10 @@ func testTableGeneration(t *testing.T) {
 
 // testDBMethods to test the database operation methods.
 func testDBMethods(t *testing.T) {
+	testGetNoNotifications(t)
 	insertNotifications(t)
-	testGetNotifications(t)
+	testGetNotificationsAndRead(t)
+	testDeleteNotifications(t)
 
 	truncate(t)
 }
@@ -43,15 +45,42 @@ func insertNotifications(t *testing.T) {
 	one.At = int32(time.Now().Unix())
 	one.Value, _ = json.Marshal(testMsg)
 	insertNotification(&one)
+
+	var two Notification
+	two.NotificationID = uuid.NewV1().String()
+	two.Type = 0
+	two.Userid = 2
+	two.At = int32(time.Now().Unix())
+	two.Value, _ = json.Marshal(testMsg)
+	insertNotification(&two)
+
+	var three Notification
+	three.NotificationID = uuid.NewV1().String()
+	three.Type = 0
+	three.Userid = 2
+	three.At = int32(time.Now().Unix())
+	three.Value, _ = json.Marshal(testMsg)
+	insertNotification(&three)
 }
 
-func testGetNotifications(t *testing.T) {
+func testGetNoNotifications(t *testing.T) {
 	result, err := getNotifications(2, 0)
 	if err != nil {
 		t.Error(err)
 	}
 
-	if len(result) != 1 {
+	if len(result) != 0 {
+		t.Error("result is wrong")
+	}
+}
+
+func testGetNotificationsAndRead(t *testing.T) {
+	result, err := getNotifications(2, 0)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(result) != 3 {
 		t.Error("result is wrong")
 	} else {
 		var testMsg TestFormat
@@ -60,6 +89,83 @@ func testGetNotifications(t *testing.T) {
 		}
 		if testMsg.Message != "你好" {
 			t.Error("result is wrong.")
+		}
+	}
+
+	// read one notification.
+	notisid := result[0].NotificationID
+	if err := readNotification(notisid); err != nil {
+		t.Error(err)
+	}
+
+	if oneReadResult, err := getNotifications(2, 0); err != nil {
+		t.Error(err)
+	} else {
+		for _, one := range oneReadResult {
+			if one.NotificationID == notisid {
+				if !one.Read {
+					t.Error("result is wrong.")
+				}
+			} else {
+				if one.Read {
+					t.Error("result is wrong.")
+				}
+			}
+		}
+	}
+
+	// read all notifications.
+	if err := readAllNotification(2); err != nil {
+		t.Error(err)
+	}
+
+	if oneReadResult, err := getNotifications(2, 0); err != nil {
+		t.Error(err)
+	} else {
+		for _, one := range oneReadResult {
+			if !one.Read {
+				t.Error("result is wrong.")
+			}
+		}
+	}
+}
+
+func testDeleteNotifications(t *testing.T) {
+	result, err := getNotifications(2, 0)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(result) != 3 {
+		t.Error("result is wrong")
+	}
+
+	// delete one notification.
+	notisid := result[0].NotificationID
+	if err := deleteNotification(notisid); err != nil {
+		t.Error(err)
+	}
+
+	if oneReadResult, err := getNotifications(2, 0); err != nil {
+		t.Error(err)
+	} else {
+		for _, one := range oneReadResult {
+			if one.NotificationID == notisid {
+				t.Error("notification should be deleted.")
+			}
+		}
+	}
+
+	// delete all notifications.
+	if err := deleteAllNotification(2); err != nil {
+		t.Error(err)
+	}
+
+	if oneReadResult, err := getNotifications(2, 0); err != nil {
+		t.Error(err)
+	} else {
+		if len(oneReadResult) > 0 {
+			t.Error("There should be no result.")
 		}
 	}
 }

@@ -34,7 +34,7 @@ func insertNotification(notis *Notification) error {
 // getNotifications to get the notifications.
 // utime the unixtime, the notifications will be got after that time.
 func getNotifications(userid, utime int32) ([]Notification, error) {
-	s := "select id,type,read,at,value from notification where userid=$1 and at>=$2"
+	s := "SELECT id,type,read,at,value FROM notification WHERE userid=$1 AND at>=$2"
 	rows, _ := dbPool.Query(s, userid, utime)
 
 	var result []Notification
@@ -49,4 +49,32 @@ func getNotifications(userid, utime int32) ([]Notification, error) {
 	}
 
 	return result, rows.Err()
+}
+
+// readNotification to mark a notification as read.
+func readNotification(notisid string) error {
+	s := "UPDATE notification SET read=true WHERE id=$1"
+	_, err := dbPool.Query(s, notisid)
+	return err
+}
+
+// readAllNotification to mark all notifications as read.
+func readAllNotification(userid int32) error {
+	s := "UPDATE notification SET read=true WHERE userid=$1"
+	_, err := dbPool.Query(s, userid)
+	return err
+}
+
+// deleteNotification to delete a notification.
+func deleteNotification(notisid string) error {
+	s := "DELETE FROM notification WHERE id=$1"
+	_, err := dbPool.Query(s, notisid)
+	return err
+}
+
+// deleteAllNotification to delete a notification.
+func deleteAllNotification(userid int32) error {
+	s := "DELETE FROM notification WHERE userid=$1"
+	_, err := dbPool.Query(s, userid)
+	return err
 }
