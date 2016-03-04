@@ -2,6 +2,10 @@ package kknotis
 
 import "github.com/jackc/pgx"
 
+const (
+	insert = "INSERT INTO notification(id,userid,type,at,value) VALUES($1,$2,$3,$4,$5)"
+)
+
 // dbPool the pgx database pool.
 var dbPool *pgx.ConnPool
 
@@ -19,4 +23,30 @@ func prepareDB() error {
 
 	_, err := dbPool.Exec(s)
 	return err
+}
+
+// insertNotification to insert a notification to database.
+func insertNotification(notis *Notification) error {
+	_, err := dbPool.Exec(insert, notis.NotificationID, notis.Userid, notis.Type, notis.At, notis.Value)
+	return err
+}
+
+// getNotifications to get the notifications.
+// utime the unixtime, the notifications will be got after that time.
+func getNotifications(userid, utime int32) ([]Notification, error) {
+	s := "select id,type,read,at,value from notification where userid=$1 and at>=$2"
+	rows, _ := dbPool.Query(s, userid, utime)
+
+	var result []Notification
+	for rows.Next() {
+		var one Notification
+		err := rows.Scan(&(one.NotificationID), &(one.Type), &(one.Read), &(one.At), &(one.Value))
+		if err != nil {
+			return result, err
+		}
+		one.Userid = userid
+		result = append(result, one)
+	}
+
+	return result, rows.Err()
 }

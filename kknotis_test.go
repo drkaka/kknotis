@@ -37,6 +37,8 @@ func TestMain(t *testing.T) {
 	}
 	testTableGeneration(t)
 
+	testDBMethods(t)
+
 	if _, err = dbPool.Exec("DROP TABLE notification"); err != nil {
 		t.Error(err)
 	}
