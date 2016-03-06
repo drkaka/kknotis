@@ -26,3 +26,35 @@ CREATE INDEX IF NOT EXISTS index_notification_at ON notification (at);
 go get github.com/jackc/pgx
 go get github.com/satori/go.uuid
 ```
+
+## Usage 
+
+####First need to use the module with the pgx pool passed in:
+```Go
+err := kknotis.Use(pool)
+```
+
+####Get notifications:
+```Go
+result, err := kknotis.GetNotifications(3, 0);
+```
+
+####Read one notification:
+```Go
+err := kknotis.ReadNotification(notisid);
+```
+
+####Read all notifications:
+```Go
+err := kknotis.ReadAllNotifications(3);
+```
+
+####Delete one notification:
+```Go
+err := kknotis.DeleteNotification(notisid);
+```
+
+####Delete all notifications:
+```Go
+err := kknotis.DeleteAllNotifications(3);
+```
