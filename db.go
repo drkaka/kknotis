@@ -17,7 +17,7 @@ func prepareDB() error {
     type smallint,
     read boolean DEFAULT false,
     at integer,
-    value JSONB);
+    value text);
     CREATE INDEX IF NOT EXISTS index_notification_userid ON notification (userid);
     CREATE INDEX IF NOT EXISTS index_notification_at ON notification (at);`
 
@@ -54,27 +54,27 @@ func getNotifications(userid, utime int32) ([]Notification, error) {
 // readNotification to mark a notification as read.
 func readNotification(notisid string) error {
 	s := "UPDATE notification SET read=true WHERE id=$1"
-	_, err := dbPool.Query(s, notisid)
+	_, err := dbPool.Exec(s, notisid)
 	return err
 }
 
 // readAllNotification to mark all notifications as read.
-func readAllNotification(userid int32) error {
+func readAllNotifications(userid int32) error {
 	s := "UPDATE notification SET read=true WHERE userid=$1"
-	_, err := dbPool.Query(s, userid)
+	_, err := dbPool.Exec(s, userid)
 	return err
 }
 
 // deleteNotification to delete a notification.
 func deleteNotification(notisid string) error {
 	s := "DELETE FROM notification WHERE id=$1"
-	_, err := dbPool.Query(s, notisid)
+	_, err := dbPool.Exec(s, notisid)
 	return err
 }
 
-// deleteAllNotification to delete a notification.
-func deleteAllNotification(userid int32) error {
+// deleteAllNotifications to delete a notification.
+func deleteAllNotifications(userid int32) error {
 	s := "DELETE FROM notification WHERE userid=$1"
-	_, err := dbPool.Query(s, userid)
+	_, err := dbPool.Exec(s, userid)
 	return err
 }

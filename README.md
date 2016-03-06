@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS notification (
     type smallint,
     read boolean DEFAULT false,
     at integer,
-    value JSONB
+    value text
 );
 CREATE INDEX IF NOT EXISTS index_notification_userid ON notification (userid);
 CREATE INDEX IF NOT EXISTS index_notification_at ON notification (at);

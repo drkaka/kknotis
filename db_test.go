@@ -40,12 +40,19 @@ func insertNotifications(t *testing.T) {
 	var testMsg TestFormat
 	testMsg.Message = "你好"
 
+	var v []byte
+	var err error
+
 	var one Notification
 	one.NotificationID = uuid.NewV1().String()
 	one.Type = 0
 	one.Userid = 2
 	one.At = int32(time.Now().Unix())
-	one.Value, _ = json.Marshal(testMsg)
+	if v, err = json.Marshal(testMsg); err != nil {
+		t.Error(err)
+	} else {
+		one.Value = string(v)
+	}
 	insertNotification(&one)
 
 	var two Notification
@@ -53,7 +60,12 @@ func insertNotifications(t *testing.T) {
 	two.Type = 0
 	two.Userid = 2
 	two.At = int32(time.Now().Unix())
-	two.Value, _ = json.Marshal(testMsg)
+	if v, err = json.Marshal(testMsg); err != nil {
+		t.Error(err)
+	} else {
+		two.Value = string(v)
+	}
+	insertNotification(&one)
 	insertNotification(&two)
 
 	var three Notification
@@ -61,7 +73,12 @@ func insertNotifications(t *testing.T) {
 	three.Type = 0
 	three.Userid = 2
 	three.At = int32(time.Now().Unix())
-	three.Value, _ = json.Marshal(testMsg)
+	if v, err = json.Marshal(testMsg); err != nil {
+		t.Error(err)
+	} else {
+		three.Value = string(v)
+	}
+	insertNotification(&one)
 	insertNotification(&three)
 }
 
@@ -86,7 +103,7 @@ func testGetNotificationsAndRead(t *testing.T) {
 		t.Error("result is wrong")
 	} else {
 		var testMsg TestFormat
-		if err := json.Unmarshal(result[0].Value, &testMsg); err != nil {
+		if err := json.Unmarshal([]byte(result[0].Value), &testMsg); err != nil {
 			t.Error(err)
 		}
 		if testMsg.Message != "你好" {
@@ -117,7 +134,7 @@ func testGetNotificationsAndRead(t *testing.T) {
 	}
 
 	// read all notifications.
-	if err := readAllNotification(2); err != nil {
+	if err := readAllNotifications(2); err != nil {
 		t.Error(err)
 	}
 
@@ -134,13 +151,18 @@ func testGetNotificationsAndRead(t *testing.T) {
 
 // testReadEmpty to read none existed notifications.
 func testReadEmpty(t *testing.T) {
-	// read one notification.
-	if err := readNotification("notisid"); err != nil {
-		t.Error(err)
+	// read one notification with invalid id.
+	if err := readNotification("notisid"); err == nil {
+		t.Error("Should have error with invalid uuid.")
+	}
+
+	// read one empty notification.
+	if err := readNotification(uuid.NewV1().String()); err != nil {
+		t.Error("Should have error with invalid uuid.")
 	}
 
 	// read all notifications.
-	if err := readAllNotification(3); err != nil {
+	if err := readAllNotifications(3); err != nil {
 		t.Error(err)
 	}
 }
@@ -172,7 +194,7 @@ func testDeleteNotifications(t *testing.T) {
 	}
 
 	// delete all notifications.
-	if err := deleteAllNotification(2); err != nil {
+	if err := deleteAllNotifications(2); err != nil {
 		t.Error(err)
 	}
 
@@ -187,13 +209,18 @@ func testDeleteNotifications(t *testing.T) {
 
 // testDeleteEmpty to delete none existed notifications.
 func testDeleteEmpty(t *testing.T) {
-	// delete one notification.
-	if err := deleteNotification("notisid"); err != nil {
+	// delete one notification with invalid id.
+	if err := deleteNotification("notisid"); err == nil {
+		t.Error("Should have error with invalid uuid.")
+	}
+
+	// delete one empty notification.
+	if err := deleteNotification(uuid.NewV1().String()); err != nil {
 		t.Error(err)
 	}
 
 	// delete all notifications.
-	if err := deleteAllNotification(3); err != nil {
+	if err := deleteAllNotifications(3); err != nil {
 		t.Error(err)
 	}
 }
