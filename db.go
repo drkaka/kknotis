@@ -58,10 +58,24 @@ func readNotification(notisid string) error {
 	return err
 }
 
+// readNotificationsByType to delete notifications with a single type.
+func readNotificationsByType(userid int32, tp int16) error {
+	s := "UPDATE notification SET read=true WHERE userid=$1 AND type=$2"
+	_, err := dbPool.Exec(s, userid, tp)
+	return err
+}
+
 // readAllNotification to mark all notifications as read.
 func readAllNotifications(userid int32) error {
 	s := "UPDATE notification SET read=true WHERE userid=$1"
 	_, err := dbPool.Exec(s, userid)
+	return err
+}
+
+// deleteNotificationsByType to delete notifications with a single type.
+func deleteNotificationsByType(userid int32, tp int16) error {
+	s := "DELETE FROM notification WHERE userid=$1 AND type=$2"
+	_, err := dbPool.Exec(s, userid, tp)
 	return err
 }
 

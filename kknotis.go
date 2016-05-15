@@ -46,9 +46,14 @@ func ReadNotification(notisid string) error {
 	return readNotification(notisid)
 }
 
-// ReadAllNotification to read all notifications.
+// ReadAllNotifications to read all notifications.
 func ReadAllNotifications(userid int32) error {
 	return readAllNotifications(userid)
+}
+
+// DeleteNotificaitonByType to delete notifications with a single type.
+func DeleteNotificaitonByType(userid int32, tp int16) error {
+	return deleteNotificationsByType(userid, tp)
 }
 
 // DeleteNotification to delete a notification.
@@ -56,7 +61,7 @@ func DeleteNotification(notisid string) error {
 	return deleteNotification(notisid)
 }
 
-// DeleteAllNotification to delete all notifications.
+// DeleteAllNotifications to delete all notifications.
 func DeleteAllNotifications(userid int32) error {
 	return deleteAllNotifications(userid)
 }

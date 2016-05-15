@@ -33,6 +33,10 @@ func testDBMethods(t *testing.T) {
 	testDeleteNotifications(t)
 	testDeleteEmpty(t)
 
+	// test read and delete with single type.
+	insertNotifications(t)
+	testReadAndDeleteNotificationsWithType(t)
+
 	truncate(t)
 }
 
@@ -70,7 +74,7 @@ func insertNotifications(t *testing.T) {
 
 	var three Notification
 	three.NotificationID = uuid.NewV1().String()
-	three.Type = 0
+	three.Type = 1
 	three.Userid = 2
 	three.At = int32(time.Now().Unix())
 	if v, err = json.Marshal(testMsg); err != nil {
@@ -90,6 +94,34 @@ func testGetNoNotifications(t *testing.T) {
 
 	if len(result) != 0 {
 		t.Error("result is wrong")
+	}
+}
+
+func testReadAndDeleteNotificationsWithType(t *testing.T) {
+	if err := readNotificationsByType(2, 1); err != nil {
+		t.Error(err)
+	}
+
+	if result, err := getNotifications(2, 0); err != nil {
+		count := 0
+		for _, one := range result {
+			if one.Read {
+				count++
+			}
+		}
+		if count != 2 {
+			t.Error("Read is wrong.")
+		}
+	}
+
+	if err := deleteNotificationsByType(2, 0); err != nil {
+		t.Error(err)
+	}
+
+	if result, err := getNotifications(2, 0); err != nil {
+		if len(result) != 1 {
+			t.Error("Delete is wrong.")
+		}
 	}
 }
 
