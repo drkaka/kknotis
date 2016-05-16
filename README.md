@@ -49,6 +49,11 @@ err := kknotis.ReadNotification(notisid);
 err := kknotis.ReadAllNotifications(3);
 ```
 
+####Read notifications of a type
+```Go
+err := kknotis.ReadNotificationsByType(3, 0);
+```
+
 ####Delete one notification:
 ```Go
 err := kknotis.DeleteNotification(notisid);
@@ -57,4 +62,9 @@ err := kknotis.DeleteNotification(notisid);
 ####Delete all notifications:
 ```Go
 err := kknotis.DeleteAllNotifications(3);
+```
+
+####Delete notifications of a type
+```Go
+err := kknotis.DeleteNotificaitonByType(3, 0);
 ```
