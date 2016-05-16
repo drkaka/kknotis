@@ -41,6 +41,11 @@ func AddNotification(userid int32, tp int16, value string) error {
 	return insertNotification(&notis)
 }
 
+// GetUnreadCount to get unread notifications count of a user.
+func GetUnreadCount(userid int32) (int32, error) {
+	return getUnreadCount(userid)
+}
+
 // ReadNotification to read a notification.
 func ReadNotification(notisid string) error {
 	return readNotification(notisid)

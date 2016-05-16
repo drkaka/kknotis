@@ -39,6 +39,11 @@ err := kknotis.Use(pool)
 result, err := kknotis.GetNotifications(3, 0);
 ```
 
+####Get unread notifications count:
+```Go
+count, err := GetUnreadCount(3);
+```
+
 ####Read one notification:
 ```Go
 err := kknotis.ReadNotification(notisid);

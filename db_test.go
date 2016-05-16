@@ -98,8 +98,20 @@ func testGetNoNotifications(t *testing.T) {
 }
 
 func testReadAndDeleteNotificationsWithType(t *testing.T) {
+	if count, err := getUnreadCount(2); err != nil {
+		t.Error(err)
+	} else if count != 3 {
+		t.Error("Unread count is wrong.")
+	}
+
 	if err := readNotificationsByType(2, 1); err != nil {
 		t.Error(err)
+	}
+
+	if count, err := getUnreadCount(2); err != nil {
+		t.Error(err)
+	} else if count != 2 {
+		t.Error("Unread count is wrong.")
 	}
 
 	if result, err := getNotifications(2, 0); err != nil {

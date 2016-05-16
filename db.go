@@ -51,6 +51,16 @@ func getNotifications(userid, utime int32) ([]Notification, error) {
 	return result, rows.Err()
 }
 
+// getUnreadCount to get the count of unread notifications.
+func getUnreadCount(toid int32) (int32, error) {
+	s := "SELECT COUNT(1) FROM notification WHERE userid=$1 AND read=false"
+	var count int64
+	if err := dbPool.QueryRow(s, toid).Scan(&count); err != nil {
+		return 0, err
+	}
+	return int32(count), nil
+}
+
 // readNotification to mark a notification as read.
 func readNotification(notisid string) error {
 	s := "UPDATE notification SET read=true WHERE id=$1"
