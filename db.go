@@ -63,7 +63,7 @@ func getUnreadCount(toid int32) (int32, error) {
 
 // readNotification to mark a notification as read.
 func readNotification(notisid string) error {
-	s := "UPDATE notification SET read=true WHERE id=$1"
+	s := "UPDATE notification SET read=true WHERE id=$1 AND read=false"
 	_, err := dbPool.Exec(s, notisid)
 	return err
 }
