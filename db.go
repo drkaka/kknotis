@@ -34,7 +34,7 @@ func insertNotification(notis *Notification) error {
 // getNotifications to get the notifications.
 // utime the unixtime, the notifications will be got after that time.
 func getNotifications(userid, utime int32) ([]Notification, error) {
-	s := "SELECT id,type,read,at,value FROM notification WHERE userid=$1 AND at>=$2"
+	s := "SELECT id,type,read,at,value FROM notification WHERE userid=$1 AND at>$2"
 	rows, _ := dbPool.Query(s, userid, utime)
 
 	var result []Notification
