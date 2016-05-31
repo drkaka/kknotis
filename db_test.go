@@ -55,7 +55,7 @@ func insertNotifications(t *testing.T) {
 	if v, err = json.Marshal(testMsg); err != nil {
 		t.Error(err)
 	} else {
-		one.Value = string(v)
+		one.Value = v
 	}
 	insertNotification(&one)
 
@@ -67,7 +67,7 @@ func insertNotifications(t *testing.T) {
 	if v, err = json.Marshal(testMsg); err != nil {
 		t.Error(err)
 	} else {
-		two.Value = string(v)
+		two.Value = v
 	}
 	insertNotification(&one)
 	insertNotification(&two)
@@ -80,7 +80,7 @@ func insertNotifications(t *testing.T) {
 	if v, err = json.Marshal(testMsg); err != nil {
 		t.Error(err)
 	} else {
-		three.Value = string(v)
+		three.Value = v
 	}
 	insertNotification(&one)
 	insertNotification(&three)

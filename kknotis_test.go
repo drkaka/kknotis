@@ -81,16 +81,17 @@ func TestMain(t *testing.T) {
 }
 
 func testAddNotifications(t *testing.T) {
+	empty := []byte{'{', '}'}
 	var err error
-	if err = AddNotification(3, 0, ""); err != nil {
+	if err = AddNotification(3, 0, empty); err != nil {
 		t.Error(err)
 	}
 
-	if err = AddNotification(3, 1, ""); err != nil {
+	if err = AddNotification(3, 1, empty); err != nil {
 		t.Error(err)
 	}
 
-	if err = AddNotification(3, 2, ""); err != nil {
+	if err = AddNotification(3, 2, empty); err != nil {
 		t.Error(err)
 	}
 }

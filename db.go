@@ -17,7 +17,7 @@ func prepareDB() error {
     type smallint,
     read boolean DEFAULT false,
     at integer,
-    value text);
+    value JSONB);
     CREATE INDEX IF NOT EXISTS index_notification_userid ON notification (userid);
     CREATE INDEX IF NOT EXISTS index_notification_at ON notification (at);`
 
