@@ -1,0 +1,12 @@
+package: github.com/drkaka/kknotis
+import: 
+- package: github.com/satori/go.uuid
+- package: github.com/jackc/pgx
+  version: =2.11.0
+testImport:
+- package: github.com/mattn/goveralls
+  version: ^0.0.1
+- package: github.com/pborman/uuid
+- package: golang.org/x/tools
+  subpackages:
+  - cover

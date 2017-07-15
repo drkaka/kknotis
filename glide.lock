@@ -1,0 +1,16 @@
+hash: 03b0ac951da161f9465bf4842ce763b7cd9d8de7a04106ecb9f72617ca193e70
+updated: 2017-07-15T21:24:58.09328009+08:00
+imports:
+- name: github.com/jackc/pgx
+  version: 9bd22f689ac9f0f5445fb5dad24569d5cadf1773
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+testImports:
+- name: github.com/mattn/goveralls
+  version: 9d621f6940639bf287ecbb6f585a2c26eeba3bbe
+- name: github.com/pborman/uuid
+  version: 1b00554d822231195d1babd97ff4a781231955c9
+- name: golang.org/x/tools
+  version: d83db204cec938a53072124e16d79022316b3dc5
+  subpackages:
+  - cover

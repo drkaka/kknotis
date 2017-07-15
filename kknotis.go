@@ -15,7 +15,7 @@ type Notification struct {
 	Read           bool   `json:"read"`
 	At             int32  `json:"at"`
 	// Value can be JSON format
-	Value []byte `json:"value"`
+	Value map[string]interface{} `json:"value"`
 }
 
 // Use the pool to do further operations.
@@ -31,7 +31,7 @@ func GetNotifications(userid, utime int32) ([]Notification, error) {
 }
 
 // AddNotification to add a notification in database.
-func AddNotification(userid int32, tp int16, value []byte) error {
+func AddNotification(userid int32, tp int16, value map[string]interface{}) error {
 	var notis Notification
 	notis.NotificationID = uuid.NewV1().String()
 	notis.Userid = userid

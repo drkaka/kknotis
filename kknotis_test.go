@@ -10,37 +10,6 @@ import (
 )
 
 func TestMain(t *testing.T) {
-	// DBName := os.Getenv("dbname")
-	// if len(DBName) == 0 {
-	// 	t.Fatal("Should set a db name.")
-	// }
-	// dbinfo := fmt.Sprintf("dbname=%s", DBName)
-
-	// DBHost := os.Getenv("dbhost")
-	// if len(DBHost) == 0 {
-	// 	t.Fatal("Should set a db host.")
-	// }
-	// dbinfo = fmt.Sprintf("%s host=%s", dbinfo, DBHost)
-
-	// DBUser := os.Getenv("dbuser")
-	// if len(DBUser) == 0 {
-	// 	t.Fatal("Should set a user name")
-	// }
-	// dbinfo = fmt.Sprintf("%s user=%s", dbinfo, DBUser)
-
-	// DBPassword := os.Getenv("dbpassword")
-	// if len(DBPassword) != 0 {
-	// 	dbinfo = fmt.Sprintf("%s password=%s", dbinfo, DBPassword)
-	// }
-
-	// dbinfo = fmt.Sprintf("%s sslmode=disable", dbinfo)
-
-	// db, err := sql.Open("postgres", dbinfo)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer db.Close()
-
 	DBName := os.Getenv("dbname")
 	DBHost := os.Getenv("dbhost")
 	DBUser := os.Getenv("dbuser")
@@ -81,17 +50,16 @@ func TestMain(t *testing.T) {
 }
 
 func testAddNotifications(t *testing.T) {
-	empty := []byte{'{', '}'}
 	var err error
-	if err = AddNotification(3, 0, empty); err != nil {
+	if err = AddNotification(3, 0, nil); err != nil {
 		t.Error(err)
 	}
 
-	if err = AddNotification(3, 1, empty); err != nil {
+	if err = AddNotification(3, 1, nil); err != nil {
 		t.Error(err)
 	}
 
-	if err = AddNotification(3, 2, empty); err != nil {
+	if err = AddNotification(3, 2, nil); err != nil {
 		t.Error(err)
 	}
 }

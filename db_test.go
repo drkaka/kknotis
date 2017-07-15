@@ -1,7 +1,6 @@
 package kknotis
 
 import (
-	"encoding/json"
 	"testing"
 	"time"
 
@@ -41,22 +40,16 @@ func testDBMethods(t *testing.T) {
 }
 
 func insertNotifications(t *testing.T) {
-	var testMsg TestFormat
-	testMsg.Message = "你好"
-
-	var v []byte
-	var err error
+	testMsg := map[string]interface{}{
+		"message": "你好",
+	}
 
 	var one Notification
 	one.NotificationID = uuid.NewV1().String()
 	one.Type = 0
 	one.Userid = 2
 	one.At = int32(time.Now().Unix())
-	if v, err = json.Marshal(testMsg); err != nil {
-		t.Error(err)
-	} else {
-		one.Value = v
-	}
+	one.Value = testMsg
 	insertNotification(&one)
 
 	var two Notification
@@ -64,11 +57,8 @@ func insertNotifications(t *testing.T) {
 	two.Type = 0
 	two.Userid = 2
 	two.At = int32(time.Now().Unix())
-	if v, err = json.Marshal(testMsg); err != nil {
-		t.Error(err)
-	} else {
-		two.Value = v
-	}
+	two.Value = testMsg
+
 	insertNotification(&one)
 	insertNotification(&two)
 
@@ -77,11 +67,7 @@ func insertNotifications(t *testing.T) {
 	three.Type = 1
 	three.Userid = 2
 	three.At = int32(time.Now().Unix())
-	if v, err = json.Marshal(testMsg); err != nil {
-		t.Error(err)
-	} else {
-		three.Value = v
-	}
+	three.Value = testMsg
 	insertNotification(&one)
 	insertNotification(&three)
 }
@@ -146,11 +132,7 @@ func testGetNotificationsAndRead(t *testing.T) {
 	if len(result) != 3 {
 		t.Error("result is wrong")
 	} else {
-		var testMsg TestFormat
-		if err := json.Unmarshal([]byte(result[0].Value), &testMsg); err != nil {
-			t.Error(err)
-		}
-		if testMsg.Message != "你好" {
+		if result[0].Value["message"] != "你好" {
 			t.Error("result is wrong.")
 		}
 	}
